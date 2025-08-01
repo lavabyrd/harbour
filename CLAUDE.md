@@ -72,3 +72,12 @@ The web and mobile apps share components via `react-native-web`, allowing code r
 - **Mobile**: React Native with minimal native Swift/Kotlin
 - **Web**: React with react-native-web
 - **CI/CD**: GitHub Actions
+
+## Git Configuration
+- GitHub username: lavabyrd
+- Committer email: 7063963+lavabyrd@users.noreply.github.com
+- Repository: https://github.com/lavabyrd/harbour
+- Uses SSH for git operations
+
+## Git Workflow
+- Use develop branches, so feature branch, merges to develop, merges to main

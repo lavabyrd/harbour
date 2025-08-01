@@ -1,0 +1,9 @@
+v: 0
+micros:
+  - name: harbour-backend
+    src: .
+    engine: go
+    primary: true
+    public: true
+    run: go run main.go
+    dev: go run main.go
