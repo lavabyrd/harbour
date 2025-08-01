@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/deta/deta-go/deta"
@@ -28,23 +29,30 @@ type Response struct {
 	Message string `json:"message"`
 }
 
-var db base.Base
+var db *base.Base
+var localStore map[string]Bookmark
+var storeMutex sync.RWMutex
+var useLocalStore bool
 
 func main() {
-	// Initialize Deta
+	// Check if we should use local storage for development
 	projectKey := os.Getenv("DETA_PROJECT_KEY")
 	if projectKey == "" {
-		log.Fatal("DETA_PROJECT_KEY environment variable is required")
-	}
+		log.Println("No DETA_PROJECT_KEY found, using local in-memory storage for development")
+		useLocalStore = true
+		localStore = make(map[string]Bookmark)
+	} else {
+		// Initialize Deta for production
+		d, err := deta.New(deta.WithProjectKey(projectKey))
+		if err != nil {
+			log.Fatal("Failed to initialize Deta:", err)
+		}
 
-	d, err := deta.New(deta.WithProjectKey(projectKey))
-	if err != nil {
-		log.Fatal("Failed to initialize Deta:", err)
-	}
-
-	db, err = base.New(d, "bookmarks")
-	if err != nil {
-		log.Fatal("Failed to initialize Deta Base:", err)
+		db, err = base.New(d, "bookmarks")
+		if err != nil {
+			log.Fatal("Failed to initialize Deta Base:", err)
+		}
+		log.Println("Using Deta Base for storage")
 	}
 
 	// Set up routes
@@ -102,14 +110,29 @@ func bookmarksHandler(w http.ResponseWriter, r *http.Request) {
 		CreatedAt: time.Now(),
 	}
 
-	key, err := db.Put(bookmark)
-	if err != nil {
-		log.Printf("Failed to save bookmark: %v", err)
-		http.Error(w, "Failed to save bookmark", http.StatusInternalServerError)
-		return
-	}
+	var key string
+	var err error
 
-	log.Printf("Saved bookmark with key: %s, URL: %s", key, req.URL)
+	if useLocalStore {
+		// Generate a simple key for local storage
+		key = fmt.Sprintf("bookmark_%d", time.Now().UnixNano())
+		bookmark.Key = key
+		
+		storeMutex.Lock()
+		localStore[key] = bookmark
+		storeMutex.Unlock()
+		
+		log.Printf("Saved bookmark locally with key: %s, URL: %s", key, req.URL)
+	} else {
+		// Use Deta Base
+		key, err = db.Put(bookmark)
+		if err != nil {
+			log.Printf("Failed to save bookmark: %v", err)
+			http.Error(w, "Failed to save bookmark", http.StatusInternalServerError)
+			return
+		}
+		log.Printf("Saved bookmark to Deta with key: %s, URL: %s", key, req.URL)
+	}
 
 	response := Response{
 		Message: "Bookmark saved successfully!",
