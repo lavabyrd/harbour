@@ -75,7 +75,7 @@ The web and mobile apps share components via `react-native-web`, allowing code r
 
 ## Git Configuration
 - GitHub username: lavabyrd
-- Committer email: mark@lavabyrd.space
+- Committer email: 7063963+lavabyrd@users.noreply.github.com
 - Repository: https://github.com/lavabyrd/harbour
 - Uses SSH for git operations
 
