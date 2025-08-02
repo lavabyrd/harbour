@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native-web';
+import React, { useState } from 'react';
 import './App.css';
 
 interface Bookmark {
@@ -68,43 +67,44 @@ function App() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>🚢 Harbour</Text>
-        <Text style={styles.subtitle}>Your personal bookmark manager</Text>
-      </View>
+    <div className="container">
+      <header className="header">
+        <h1 className="title">🚢 Harbour</h1>
+        <p className="subtitle">Your personal bookmark manager</p>
+      </header>
 
-      <View style={styles.form}>
-        <Text style={styles.formTitle}>Add New Bookmark</Text>
+      <div className="form">
+        <h2 className="form-title">Add New Bookmark</h2>
         
         <form onSubmit={handleSubmit}>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>URL *</Text>
-            <TextInput
-              style={styles.input}
+          <div className="input-group">
+            <label className="label">URL *</label>
+            <input
+              type="url"
+              className="input"
               value={url}
-              onChangeText={setUrl}
+              onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com"
-              placeholderTextColor="#999"
+              required
             />
-          </View>
+          </div>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Title (optional)</Text>
-            <TextInput
-              style={styles.input}
+          <div className="input-group">
+            <label className="label">Title (optional)</label>
+            <input
+              type="text"
+              className="input"
               value={title}
-              onChangeText={setTitle}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Optional title for the bookmark"
-              placeholderTextColor="#999"
             />
-          </View>
+          </div>
 
           <button 
             type="submit" 
             disabled={loading || !url.trim()}
+            className="button"
             style={{
-              ...styles.button,
               opacity: loading || !url.trim() ? 0.6 : 1,
             }}
           >
@@ -113,169 +113,37 @@ function App() {
         </form>
 
         {message && (
-          <Text style={[
-            styles.message,
-            message.includes('Error') || message.includes('Failed') ? styles.errorMessage : styles.successMessage
-          ]}>
+          <div className={`message ${message.includes('Error') || message.includes('Failed') ? 'error-message' : 'success-message'}`}>
             {message}
-          </Text>
+          </div>
         )}
-      </View>
+      </div>
 
-      <View style={styles.bookmarksList}>
-        <Text style={styles.sectionTitle}>Recent Bookmarks</Text>
+      <div className="bookmarks-list">
+        <h2 className="section-title">Recent Bookmarks</h2>
         {bookmarks.length === 0 ? (
-          <Text style={styles.emptyState}>
+          <p className="empty-state">
             No bookmarks yet. Add your first bookmark above!
-          </Text>
+          </p>
         ) : (
           bookmarks.map((bookmark, index) => (
-            <View key={index} style={styles.bookmarkItem}>
-              <Text style={styles.bookmarkTitle}>{bookmark.title}</Text>
-              <Text style={styles.bookmarkUrl}>{bookmark.url}</Text>
+            <div key={index} className="bookmark-item">
+              <h3 className="bookmark-title">{bookmark.title}</h3>
+              <a href={bookmark.url} target="_blank" rel="noopener noreferrer" className="bookmark-url">
+                {bookmark.url}
+              </a>
               {bookmark.created_at && (
-                <Text style={styles.bookmarkDate}>
+                <p className="bookmark-date">
                   {new Date(bookmark.created_at).toLocaleDateString()}
-                </Text>
+                </p>
               )}
-            </View>
+            </div>
           ))
         )}
-      </View>
-    </View>
+      </div>
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-    minHeight: '100vh',
-  },
-  header: {
-    backgroundColor: '#2563eb',
-    paddingVertical: 32,
-    paddingHorizontal: 24,
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: 'white',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#e0e7ff',
-  },
-  form: {
-    backgroundColor: 'white',
-    margin: 24,
-    padding: 24,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  formTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 20,
-    color: '#1f2937',
-  },
-  inputGroup: {
-    marginBottom: 16,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
-    marginBottom: 6,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 16,
-    backgroundColor: 'white',
-  },
-  button: {
-    backgroundColor: '#2563eb',
-    color: 'white',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    border: 'none',
-    fontSize: 16,
-    fontWeight: '500',
-    cursor: 'pointer',
-    width: '100%',
-  },
-  message: {
-    marginTop: 12,
-    padding: 12,
-    borderRadius: 6,
-    fontSize: 14,
-  },
-  successMessage: {
-    backgroundColor: '#d1fae5',
-    color: '#065f46',
-    borderColor: '#10b981',
-    borderWidth: 1,
-  },
-  errorMessage: {
-    backgroundColor: '#fee2e2',
-    color: '#991b1b',
-    borderColor: '#ef4444',
-    borderWidth: 1,
-  },
-  bookmarksList: {
-    margin: 24,
-    marginTop: 0,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#1f2937',
-    marginBottom: 16,
-  },
-  emptyState: {
-    textAlign: 'center',
-    color: '#6b7280',
-    fontSize: 16,
-    fontStyle: 'italic',
-    padding: 32,
-  },
-  bookmarkItem: {
-    backgroundColor: 'white',
-    padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  bookmarkTitle: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#1f2937',
-    marginBottom: 4,
-  },
-  bookmarkUrl: {
-    fontSize: 14,
-    color: '#2563eb',
-    marginBottom: 4,
-  },
-  bookmarkDate: {
-    fontSize: 12,
-    color: '#6b7280',
-  },
-});
 
 export default App;
