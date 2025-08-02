@@ -83,7 +83,12 @@ function App() {
               type="url"
               className="input"
               value={url}
-              onChange={(e) => setUrl(e.target.value)}
+              onChange={(e) => {
+                console.log('URL changed:', e.target.value);
+                setUrl(e.target.value);
+              }}
+              onClick={() => console.log('URL input clicked')}
+              onFocus={() => console.log('URL input focused')}
               placeholder="https://example.com"
               required
             />
@@ -95,7 +100,10 @@ function App() {
               type="text"
               className="input"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={(e) => {
+                console.log('Title changed:', e.target.value);
+                setTitle(e.target.value);
+              }}
               placeholder="Optional title for the bookmark"
             />
           </div>
