@@ -204,6 +204,13 @@ body, html, #root {
   text-decoration: underline;
 }
 
+.bookmark-notes {
+  font-size: 14px;
+  color: #4b5563;
+  margin: 8px 0 4px 0;
+  font-style: italic;
+}
+
 .bookmark-date {
   font-size: 12px;
   color: #6b7280;

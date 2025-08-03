@@ -5,13 +5,14 @@ interface Bookmark {
   key?: string;
   url: string;
   title: string;
+  notes?: string;
   created_at?: string;
 }
 
 function App() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [url, setUrl] = useState('');
-  const [title, setTitle] = useState('');
+  const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -40,7 +41,8 @@ function App() {
         },
         body: JSON.stringify({
           url: formattedUrl,
-          title: title.trim() || formattedUrl,
+          title: formattedUrl, // Let backend/page provide title
+          notes: notes.trim(),
         }),
       });
 
@@ -49,11 +51,12 @@ function App() {
       if (response.ok) {
         setMessage('Bookmark saved successfully!');
         setUrl('');
-        setTitle('');
+        setNotes('');
         // Add to local list for immediate feedback
         setBookmarks(prev => [{
           url: formattedUrl,
-          title: title.trim() || formattedUrl,
+          title: formattedUrl, // Will be updated when we fetch real title
+          notes: notes.trim(),
           created_at: new Date().toISOString(),
         }, ...prev]);
       } else {
@@ -97,13 +100,13 @@ function App() {
           </div>
 
           <div className="input-group">
-            <label className="label">Title (optional)</label>
+            <label className="label">Notes (optional)</label>
             <input
               type="text"
               className="input"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Optional title for the bookmark"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="e.g., good kubernetes example, useful tutorial"
             />
           </div>
 
@@ -140,6 +143,9 @@ function App() {
                 <a href={bookmark.url} target="_blank" rel="noopener noreferrer" className="bookmark-url">
                   {bookmark.url}
                 </a>
+                {bookmark.notes && (
+                  <p className="bookmark-notes">{bookmark.notes}</p>
+                )}
                 {bookmark.created_at && (
                   <p className="bookmark-date">
                     {new Date(bookmark.created_at).toLocaleDateString()}
