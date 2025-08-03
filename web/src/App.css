@@ -159,30 +159,23 @@ body, html, #root {
   margin: 0;
 }
 
+/* Base bookmark item styles - overridden by grid styles below */
+
+.bookmarks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  background-color: #ffeb3b; /* Temporary yellow background to see grid */
+}
+
 .bookmark-item {
   padding: 16px;
   border-radius: 8px;
-  margin-bottom: 12px;
   border: 1px solid #e5e7eb;
+  margin-bottom: 0;
+  background-color: #e3f2fd; /* Temporary blue background to see items */
 }
 
-@media (min-width: 640px) {
-  .bookmarks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 16px;
-  }
-  
-  .bookmark-item {
-    margin-bottom: 0;
-  }
-}
-
-@media (min-width: 1024px) {
-  .bookmarks-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-}
 
 .bookmark-title {
   font-size: 16px;
