@@ -126,19 +126,21 @@ function App() {
             No bookmarks yet. Add your first bookmark above!
           </p>
         ) : (
-          bookmarks.map((bookmark, index) => (
-            <div key={index} className="bookmark-item">
-              <h3 className="bookmark-title">{bookmark.title}</h3>
-              <a href={bookmark.url} target="_blank" rel="noopener noreferrer" className="bookmark-url">
-                {bookmark.url}
-              </a>
-              {bookmark.created_at && (
-                <p className="bookmark-date">
-                  {new Date(bookmark.created_at).toLocaleDateString()}
-                </p>
-              )}
-            </div>
-          ))
+          <div className="bookmarks-grid">
+            {bookmarks.map((bookmark, index) => (
+              <div key={index} className="bookmark-item">
+                <h3 className="bookmark-title">{bookmark.title}</h3>
+                <a href={bookmark.url} target="_blank" rel="noopener noreferrer" className="bookmark-url">
+                  {bookmark.url}
+                </a>
+                {bookmark.created_at && (
+                  <p className="bookmark-date">
+                    {new Date(bookmark.created_at).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>
