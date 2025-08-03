@@ -80,7 +80,8 @@ function App() {
         <p className="subtitle">Your personal bookmark manager</p>
       </header>
 
-      <div className="form">
+      <div className="content">
+        <div className="form">
         <h2 className="form-title">Add New Bookmark</h2>
         
         <form onSubmit={handleSubmit}>
@@ -124,9 +125,9 @@ function App() {
             {message}
           </div>
         )}
-      </div>
+        </div>
 
-      <div className="bookmarks-list">
+        <div className="bookmarks-list">
         <h2 className="section-title">Recent Bookmarks</h2>
         {bookmarks.length === 0 ? (
           <p className="empty-state">
@@ -149,6 +150,7 @@ function App() {
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
