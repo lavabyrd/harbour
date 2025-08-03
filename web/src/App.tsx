@@ -26,6 +26,12 @@ function App() {
     setLoading(true);
     setMessage('');
 
+    // Auto-prepend https:// if no protocol is provided
+    let formattedUrl = url.trim();
+    if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+      formattedUrl = `https://${formattedUrl}`;
+    }
+
     try {
       const response = await fetch(`${API_BASE}/api/bookmarks`, {
         method: 'POST',
@@ -33,8 +39,8 @@ function App() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          url: url.trim(),
-          title: title.trim() || url.trim(),
+          url: formattedUrl,
+          title: title.trim() || formattedUrl,
         }),
       });
 
@@ -46,8 +52,8 @@ function App() {
         setTitle('');
         // Add to local list for immediate feedback
         setBookmarks(prev => [{
-          url: url.trim(),
-          title: title.trim() || url.trim(),
+          url: formattedUrl,
+          title: title.trim() || formattedUrl,
           created_at: new Date().toISOString(),
         }, ...prev]);
       } else {
@@ -81,11 +87,11 @@ function App() {
           <div className="input-group">
             <label className="label">URL *</label>
             <input
-              type="url"
+              type="text"
               className="input"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com"
+              placeholder="google.ie or https://example.com"
               required
             />
           </div>
