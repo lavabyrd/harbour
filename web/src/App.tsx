@@ -9,7 +9,14 @@ interface Bookmark {
 }
 
 function App() {
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([
+    // Sample bookmarks to demonstrate grid layout
+    { url: 'https://github.com/lavabyrd/harbour', title: 'Harbour Repository', created_at: new Date().toISOString() },
+    { url: 'https://react.dev', title: 'React Documentation', created_at: new Date().toISOString() },
+    { url: 'https://vitejs.dev', title: 'Vite - Frontend Tooling', created_at: new Date().toISOString() },
+    { url: 'https://tailwindcss.com', title: 'Tailwind CSS Framework', created_at: new Date().toISOString() },
+    { url: 'https://deta.space', title: 'Deta Space Platform', created_at: new Date().toISOString() },
+  ]);
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
   const [loading, setLoading] = useState(false);

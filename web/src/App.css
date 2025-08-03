@@ -175,15 +175,21 @@ body, html, #root {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .bookmarks-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 16px;
   }
   
   .bookmark-item {
     margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1200px) {
+  .bookmarks-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   }
 }
 
